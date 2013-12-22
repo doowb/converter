@@ -21,7 +21,7 @@ module.exports = function(grunt) {
     mochaTest: {
       test: {
         options: {
-          reporter: 'progress'
+          //reporter: 'progress'
         },
         src: ['test/**/*_test.js']
       }
