@@ -86,8 +86,17 @@ var convertCsvToJson = function (data, options, done) {
 	csv()
 		.from(data, options.csv)
 		.to.array(function(row) {
-			console.log(row);
 			var results = JSON.stringify(row, null, options.indent);
+			done(null, results);
+		});
+};
+
+var convertJsonToCsv = function(data, options, done) {
+	var results = '';
+	data = JSON.parse(data);
+	csv()
+		.from(data)
+		.to.string(function(results, count) {
 			done(null, results);
 		});
 };
@@ -101,7 +110,7 @@ var convertXmlToJson = function(data, options, done) {
 };
 
 var convertYmlToJson = function(data, options, done) {
-	var results = JSON.stringify(YAML.load(data, {fromFile: true}), null, options.indent);
+	var results = JSON.stringify(YAML.load(data, {fromFile: false}), null, options.indent);
 	done(null, results);
 };
 
@@ -110,17 +119,9 @@ var convertPlistToJson = function(data, options, done) {
 	done(null, results);
 };
 
-var convertJsonToCsv = function(data, options, done) {
-	var results = '';
-	data = JSON.parse(data);
-	csv()
-		.from(data)
-		.to.string(function(results, count) {
-			done(null, results);
-		});
-};
 
 var convertJsonToXml = function(data, options, done) {
+	options.xml = options.xml || {};
 	options.xml.header = options.header ? options.header : options.xml.header;
 	data = toXml(JSON.parse(data), options.xml);
 	data = (options.pretty) ? require('pretty-data').pd.xml(data) : data;
@@ -137,6 +138,63 @@ var convertJsonToPlist = function(data, options, done) {
 	done(null, results);
 };
 
+
+var convertXmlToYml = function(data, options, done) {
+	convertXmlToJson(data, options, function(err, results) {
+		convertJsonToYml(results, options, done);
+	});
+};
+
+var convertYmlToCsv = function(data, options, done) {
+	convertYmlToJson(data, options, function(err, results) {
+		convertJsonToCsv(results, options, done);
+	});
+};
+
+var convertYmlToXml = function(data, options, done) {
+	convertYmlToJson(data, options, function(err, results) {
+		convertJsonToXml(results, options, done);
+	});
+};
+
+var convertYmlToYml = function(data, options, done) {
+	convertYmlToJson(data, options, function(err, results) {
+		convertJsonToYml(results, options, done);
+	});
+};
+
+var convertYmlToPlist = function(data, options, done) {
+	convertYmlToJson(data, options, function(err, results) {
+		convertJsonToPlist(results, options, done);
+	});
+};
+
+
+var convertPlistToCsv = function(data, options, done) {
+	convertPlistToJson(data, options, function(err, results) {
+		convertJsonToCsv(results, options, done);
+	});
+};
+
+var convertPlistToXml = function(data, options, done) {
+	convertPlistToJson(data, options, function(err, results) {
+		convertJsonToXml(results, options, done);
+	});
+};
+
+var convertPlistToYml = function(data, options, done) {
+	convertPlistToJson(data, options, function(err, results) {
+		convertJsonToYml(results, options, done);
+	});
+};
+
+var convertPlistToPlist = function(data, options, done) {
+	convertPlistToJson(data, options, function(err, results) {
+		convertJsonToPlist(results, options, done);
+	});
+};
+
+
 var map = {
 
 	'csv': {
@@ -144,15 +202,24 @@ var map = {
 	},
 
 	'xml': {
-		'json': convertXmlToJson
+		'json': convertXmlToJson,
+		'yml': convertXmlToYml
 	},
 
 	'yml': {
-		'json': convertYmlToJson
+		'json': convertYmlToJson,
+		'csv': convertYmlToCsv,
+		'xml': convertYmlToXml,
+		'yml': convertYmlToYml,
+		'plist': convertYmlToPlist
 	},
 
 	'plist': {
-		'json': convertPlistToJson
+		'json': convertPlistToJson,
+		'csv': convertPlistToCsv,
+		'xml': convertPlistToXml,
+		'yml': convertPlistToYml,
+		'plist': convertPlistToPlist
 	},
 
 	'json': {
@@ -177,6 +244,8 @@ var convert = module.exports = function(options) {
 	};
 
 	converter._flush = function(done) {
+		console.log(from + ' => ' + to);
+		console.log(map[from][to]);
 		map[from][to](buffer, opts, function(err, data) {
 			if(err) {
 				console.log('Error: ', err);
