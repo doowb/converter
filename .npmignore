@@ -11,3 +11,4 @@ TODO.md
 *.sublime-*
 .gitignore
 .npmignore
+test
