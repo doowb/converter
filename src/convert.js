@@ -110,7 +110,7 @@ var convertXmlToJson = function(data, options, done) {
 };
 
 var convertYmlToJson = function(data, options, done) {
-	var results = JSON.stringify(YAML.load(data, {fromFile: false}), null, options.indent);
+	var results = JSON.stringify(YAML.parse(data), null, options.indent);
 	done(null, results);
 };
 
@@ -118,6 +118,7 @@ var convertPlistToJson = function(data, options, done) {
 	var results = JSON.stringify(plist.parseFileSync(data), null, options.indent);
 	done(null, results);
 };
+
 
 
 var convertJsonToXml = function(data, options, done) {
@@ -138,12 +139,32 @@ var convertJsonToPlist = function(data, options, done) {
 	done(null, results);
 };
 
+var convertJsonToJson = function(data, options, done) {
+	// this is just dumb :)
+	var results = JSON.stringify(JSON.parse(data), null, options.indent);
+	done(null, results);
+};
+
 
 var convertXmlToYml = function(data, options, done) {
 	convertXmlToJson(data, options, function(err, results) {
 		convertJsonToYml(results, options, done);
 	});
 };
+
+var convertXmlToPlist = function(data, options, done) {
+	convertXmlToJson(data, options, function(err, results) {
+		convertJsonToPlist(results, options, done);
+	});
+};
+
+var convertXmlToXml = function(data, options, done) {
+	convertXmlToJson(data, options, function(err, results) {
+		convertJsonToXml(results, options, done);
+	});
+};
+
+
 
 var convertYmlToCsv = function(data, options, done) {
 	convertYmlToJson(data, options, function(err, results) {
@@ -168,6 +189,7 @@ var convertYmlToPlist = function(data, options, done) {
 		convertJsonToPlist(results, options, done);
 	});
 };
+
 
 
 var convertPlistToCsv = function(data, options, done) {
@@ -244,8 +266,6 @@ var convert = module.exports = function(options) {
 	};
 
 	converter._flush = function(done) {
-		console.log(from + ' => ' + to);
-		console.log(map[from][to]);
 		map[from][to](buffer, opts, function(err, data) {
 			if(err) {
 				console.log('Error: ', err);

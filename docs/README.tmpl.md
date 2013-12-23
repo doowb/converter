@@ -5,9 +5,6 @@
 ## Getting Started
 {%= _.doc("quickstart.md") %}
 
-## Options
-{%= _.doc("options.md") %}
-
 ## Contributing
 {%= _.contrib("contributing.md") %}
 

@@ -15,60 +15,32 @@ Use within your application with the following line of JavaScript:
 var data_convert = require('data-convert');
 ```
 
-
-
-
-
-## Options
-#### foo
-Type: `String`
-Default value: `undefeined`
-
-A string value that is used to do something with whatever.
-
-#### bar
-Type: `Array`
-Default value: `[]`
-
-A string value that is used to do something else with whatever else.
-
-
-
-### Usage Examples
-
-#### Example foo
-Transform a string with an object of replacement patterns
+Calling `var converter = data_convert(options);` gives you a `transform` stream that will take in data and convert it based on the options passed in.
 
 ```js
-frep.strWithObj(String, Object)
-```
 
-Parameters:
+var fs = require('fs');
+var data_convert = require('data-convert');
 
-* `String`: The string to modify with the given replacement patterns.
-* `Object`: Object of replacement patterns, where each key is a string or a RegExp `pattern`, and each value is the `replacement` string or function to be called for each match.
-* A new string is returned with some or all matches replaced by the given replacement patterns.
+// get a file stream reader pointing to the csv file to convert
+var reader = fs.createReadStream('path/to/csv/file.csv');
 
+// get a file stream writer pointing to the json file to write to
+var writer = fs.createWriteStream('path/to/output/json/file.json');
 
-Given the following:
-
-```js
-var frep = require('frep');
-
-var str = 'ABC'
-var replacements = {
-  'A': 'AAA',
-  'B': 'BBB',
-  'C': 'CCC',
-  'D': 'DDD',
-  'E': 'EEE',
-  'F': 'FFF'
+// setup the options for the data converter
+var options = {
+	from: 'csv',
+	to: 'json'
 };
 
-frep.strWithObj(str, replacements));
-// => AAABBBCCC
-```
+// get a data converter stream using the given options
+var converter = data_convert(options);
 
+// pipe everything to do the conversion
+reader.pipe(converter).pipe(writer);
+
+```
 
 
 ## Contributing
