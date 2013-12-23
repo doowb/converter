@@ -253,28 +253,31 @@ var map = {
 
 };
 
-var convert = module.exports = function(options) {
-	var opts = extend(options);
-	var from = opts.from.toLowerCase();
-	var to = opts.to.toLowerCase();
-	var buffer = '';
+var Converter = function(options) {
+	var self = this;
+	self.opts = extend(options);
+	self.from = self.opts.from.toLowerCase();
+	self.to = self.opts.to.toLowerCase();
+	self.buffer = '';
 
-	var converter = new stream.Transform();
-	converter._transform = function(data, encoding, done) {
-		buffer += data;
+	self.stream = new stream.Transform();
+	self.stream._transform = function(data, encoding, done) {
+		self.buffer += data;
 		done();
 	};
 
-	converter._flush = function(done) {
-		map[from][to](buffer, opts, function(err, data) {
+	self.stream._flush = function(done) {
+		map[self.from][self.to](self.buffer, self.opts, function(err, data) {
 			if(err) {
 				console.log('Error: ', err);
 				return done();
 			}
-			converter.push(data);
+			self.stream.push(data);
 			done();
 		});
 	};
+};
 
-	return converter;
+var convert = module.exports = function(options) {
+	return new Converter(options).stream;
 };
