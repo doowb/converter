@@ -1,6 +1,6 @@
 {
   "name": "data-convert",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Convert between XML, JSON and YAML, from one format to another.",
   "main": "index.js",
   "scripts": {
