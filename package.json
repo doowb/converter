@@ -1,5 +1,5 @@
 {
-  "name": "data-convert",
+  "name": "converter",
   "version": "0.0.3",
   "description": "Convert between XML, JSON and YAML, from one format to another.",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/assemble/data-convert"
+    "url": "https://github.com/assemble/converter"
   },
   "keywords": [
     "data",
@@ -22,7 +22,7 @@
   "author": "Brian Woodward",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/assemble/data-convert/issues"
+    "url": "https://github.com/assemble/converter/issues"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
