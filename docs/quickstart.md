@@ -10,7 +10,7 @@ Use within your application with the following line of JavaScript:
 var {%= safename %} = require('{%= name %}');
 ```
 
-Calling `var converter = {%= safename %}(options);` gives you a `transform` stream that will take in data and convert it based on the options passed in.
+Calling `var convert = {%= safename %}(options);` gives you a `transform` stream that will take in data and convert it based on the options passed in.
 
 ```js
 
@@ -30,9 +30,9 @@ var options = {
 };
 
 // get a data converter stream using the given options
-var converter = {%= safename %}(options);
+var convert = {%= safename %}(options);
 
 // pipe everything to do the conversion
-reader.pipe(converter).pipe(writer);
+reader.pipe(convert).pipe(writer);
 
 ```
