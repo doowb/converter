@@ -28,6 +28,16 @@ var extend = function(options) {
 		csv: {
 			columns: true,
 			delimiter: ','
+		},
+		xml: {
+			renderOpts: {
+        pretty: true
+      },
+      xmldec: {
+        'version': '1.0',
+        'encoding': 'UTF-8',
+        'standalone': true
+      }
 		}
 	}, options);
 
@@ -72,9 +82,12 @@ var convertPlistToJson = function(data, options, done) {
 };
 
 var convertJsonToXml = function(data, options, done) {
-	options.xml = options.xml || {};
-	// currently get no data when options specify
-	var builder = new xml2js.Builder();
+	var xamlOpts = options.xml || {};
+	var opts = {
+    renderOpts: xamlOpts.renderOpts,
+    xmldec: xamlOpts.xmldec
+  };
+	var builder = new xml2js.Builder(opts);
 	var xml = builder.buildObject(JSON.parse(data));
 	done(null, xml);
 };
