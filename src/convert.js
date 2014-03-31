@@ -44,6 +44,7 @@ var extend = function(options) {
   return opts;
 };
 
+
 var convertCsvToJson = function (data, options, done) {
   csv()
     .from(data, options.csv)
@@ -77,7 +78,7 @@ var convertYmlToJson = function(data, options, done) {
 };
 
 var convertPlistToJson = function(data, options, done) {
-  var results = JSON.stringify(plist.parseFileSync(data), null, options.indent);
+  var results = JSON.stringify(plist.parseStringSync(data), null, options.indent);
   done(null, results);
 };
 
