@@ -55,6 +55,7 @@ var createFileStreams = function(filename, options) {
 describe('convert', function() {
 
   it('should create new stream', function(done) {
+    var options = { csv: { parse: { columns: null } } };
     var expected = '[\n  [\n    \"beep\"\n  ]\n]';
     var reader = createReader(['beep']);
     var writer = createWriter(function() {
@@ -62,7 +63,7 @@ describe('convert', function() {
         done();
       });
 
-    reader.pipe(convert()).pipe(writer);
+    reader.pipe(convert(options)).pipe(writer);
   });
 
 
@@ -96,6 +97,23 @@ describe('convert', function() {
       to: 'csv'
     };
     var files = createFileStreams('json2csv', options);
+    files.reader
+      .pipe(convert(options))
+      .pipe(files.writer);
+    done();
+  });
+
+  it('should convert json to csv with header', function(done) {
+    var options = {
+      from: 'json',
+      to: 'csv',
+      csv: {
+        stringify: {
+          header: true
+        }
+      }
+    };
+    var files = createFileStreams('json2csvWithHeader', options);
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
@@ -137,7 +155,7 @@ describe('convert', function() {
       .pipe(files.writer);
     done();
   });
-  
+
   it('should convert yml to json', function(done) {
     var options = {
       from: 'yml',

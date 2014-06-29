@@ -26,8 +26,10 @@ var extend = function(options) {
     inline: 8,
     indent: 2,
     csv: {
-      columns: true,
-      delimiter: ','
+      stringify: {},
+      parse: {
+        columns: true
+      }
     },
     xml: {
       renderOpts: {
@@ -46,22 +48,17 @@ var extend = function(options) {
 
 
 var convertCsvToJson = function (data, options, done) {
-  csv()
-    .from(data, options.csv)
-    .to.array(function(row) {
-      var results = JSON.stringify(row, null, options.indent);
-      done(null, results);
-    });
+  csv.parse(data, options.csv.parse, function(err, output) {
+    var results = JSON.stringify(output, null, options.indent);
+    done(null, results);
+  });
 };
 
 var convertJsonToCsv = function(data, options, done) {
-  var results = '';
   data = JSON.parse(data);
-  csv()
-    .from(data)
-    .to.string(function(results, count) {
-      done(null, results);
-    });
+  csv.stringify(data, options.csv.stringify, function(err, output) {
+    done(null, output);
+  });
 };
 
 var convertXmlToJson = function(data, options, done) {
