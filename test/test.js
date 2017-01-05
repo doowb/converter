@@ -1,19 +1,12 @@
-/**
- * Assemble
- *
- * Assemble <http://assemble.io>
- * Created and maintained by Jon Schlinkert and Brian Woodward
- *
- * Copyright (c) 2013 Upstage.
- * Licensed under the MIT License (MIT).
- */
+'use strict';
 
-var expect = require('chai').expect;
-var stream = require('stream');
-var convert = require('../');
-var src = require('path').join.bind('.', 'test', 'fixtures');
-var dest = require('path').join.bind('.', 'test', 'actual');
 var fs = require('fs');
+var path = require('path');
+var should = require('should');
+var stream = require('stream');
+var src = path.join.bind('./test/fixtures');
+var dest = path.join.bind('./test/actual');
+var convert = require('..');
 
 var createReader = function(lines) {
   var reader = new stream.Readable();
@@ -23,7 +16,6 @@ var createReader = function(lines) {
     });
     reader.push(null);
   };
-
   return reader;
 };
 
@@ -53,21 +45,19 @@ var createFileStreams = function(filename, options) {
 };
 
 describe('convert', function() {
-
-  it('should create new stream', function(done) {
+  it('should create new stream', function(cb) {
     var options = { csv: { parse: { columns: null } } };
     var expected = '[\n  [\n    \"beep\"\n  ]\n]';
     var reader = createReader(['beep']);
     var writer = createWriter(function() {
         expect(writer.toString()).to.eql(expected);
-        done();
+        cb();
       });
 
     reader.pipe(convert(options)).pipe(writer);
   });
 
-
-  it('should convert csv to json', function(done) {
+  it('should convert csv to json', function(cb) {
     var options = {
       from: 'csv',
       to: 'json'
@@ -76,10 +66,10 @@ describe('convert', function() {
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
-    done();
+    cb();
   });
 
-  it('should convert json to xml', function(done) {
+  it('should convert json to xml', function(cb) {
     var options = {
       from: 'json',
       to: 'xml'
@@ -88,10 +78,10 @@ describe('convert', function() {
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
-    done();
+    cb();
   });
 
-  it('should convert json to csv', function(done) {
+  it('should convert json to csv', function(cb) {
     var options = {
       from: 'json',
       to: 'csv'
@@ -100,10 +90,10 @@ describe('convert', function() {
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
-    done();
+    cb();
   });
 
-  it('should convert json to csv with header', function(done) {
+  it('should convert json to csv with header', function(cb) {
     var options = {
       from: 'json',
       to: 'csv',
@@ -117,10 +107,10 @@ describe('convert', function() {
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
-    done();
+    cb();
   });
 
-  it('should convert json to yml', function(done) {
+  it('should convert json to yml', function(cb) {
     var options = {
       from: 'json',
       to: 'yml'
@@ -129,10 +119,10 @@ describe('convert', function() {
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
-    done();
+    cb();
   });
 
-  it('should convert xml to json - simple', function(done) {
+  it('should convert xml to json - simple', function(cb) {
     var options = {
       from: 'xml',
       to: 'json'
@@ -141,10 +131,10 @@ describe('convert', function() {
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
-    done();
+    cb();
   });
 
-  it('should convert xml to yml - advanced', function(done) {
+  it('should convert xml to yml - advanced', function(cb) {
     var options = {
       from: 'xml',
       to: 'yml'
@@ -153,10 +143,10 @@ describe('convert', function() {
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
-    done();
+    cb();
   });
 
-  it('should convert yml to json', function(done) {
+  it('should convert yml to json', function(cb) {
     var options = {
       from: 'yml',
       to: 'json'
@@ -165,7 +155,6 @@ describe('convert', function() {
     files.reader
       .pipe(convert(options))
       .pipe(files.writer);
-    done();
+    cb();
   });
-
 });

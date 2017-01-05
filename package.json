@@ -1,43 +1,54 @@
 {
   "name": "converter",
-  "version": "0.0.5",
-  "description": "Convert between XML, JSON and YAML, from one format to another.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Convert XML, JSON, YAML, CSV, from one format to another.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/doowb/converter",
+  "author": "Brian Woodward (https://github.com/doowb)",
+  "repository": "doowb/converter",
+  "bugs": {
+    "url": "https://github.com/doowb/converter/issues"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/assemble/converter"
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "utils.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^2.0.0",
+    "gulp-format-md": "^0.1.8",
+    "gulp-istanbul": "^0.10.4",
+    "gulp-mocha": "^2.2.0",
+    "gulp-unused": "^0.1.2"
   },
   "keywords": [
-    "data",
     "convert",
-    "assemble",
-    "xml",
+    "csv",
+    "data",
     "json",
-    "yaml",
-    "plist"
+    "plist",
+    "xml",
+    "yaml"
   ],
-  "author": "Brian Woodward",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/assemble/converter/issues"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-mocha-test": "~0.8.1",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-readme": "~0.4.5",
-    "chai": "~1.8.1"
-  },
-  "dependencies": {
-    "lodash": "~2.4.1",
-    "plist": "~0.4.3",
-    "yamljs": "~0.1.4",
-    "csv": "~0.4.0",
-    "pretty-data": "~0.40.0",
-    "xml2js": "~0.4.1"
+  "verb": {
+    "related": {
+      "list": []
+    },
+    "toc": false,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "lint": {
+      "reflinks": true
+    }
   }
 }
